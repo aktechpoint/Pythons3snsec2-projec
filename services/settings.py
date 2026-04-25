@@ -1,6 +1,11 @@
 import os
 from dataclasses import dataclass
 
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
 
 def _read_env(name: str, default: str | None = None) -> str:
     value = os.getenv(name, default)

@@ -35,13 +35,10 @@ ec2-s3-project/
    ```
 3. **Configure environment variables**:
    ```bash
-   export S3_BUCKET_NAME=your-bucket-name
-   export SNS_TOPIC_ARN=your-topic-arn
-   export AWS_REGION=ap-northeast-1
-   export MAX_UPLOAD_MB=10
-   export ALLOWED_EXTENSIONS=.txt,.pdf,.png,.jpg,.jpeg,.gif,.csv,.json
-   export S3_MAKE_PUBLIC=false
+   cp .env.example .env
+   # then edit .env with your real values
    ```
+   The app auto-loads variables from `.env`.
 4. **Configure AWS credentials** (via environment variables, AWS CLI, or `~/.aws/credentials`)
 5. **Run the app**:
    ```bash

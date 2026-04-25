@@ -72,3 +72,6 @@ ENV/
 # AWS credentials
 *.pem
 *.key
+
+# Local environment variables
+.env
