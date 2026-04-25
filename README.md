@@ -31,21 +31,34 @@ ec2-s3-project/
 1. **Clone the repository**
 2. **Install dependencies**:
    ```bash
-    sudo apt update
-    sudo apt install python3-pip -y
-    pip3 install fastapi uvicorn boto3 python-multipart jinja2
-    pip install fastapi uvicorn boto3
+   python -m pip install -r requirements.txt
    ```
-3. **Configure AWS credentials** (via environment variables, AWS CLI, or `~/.aws/credentials`)
-4. **Edit S3 bucket and SNS topic in `services/aws_service.py`** if needed.
+3. **Configure environment variables**:
+   ```bash
+   export S3_BUCKET_NAME=your-bucket-name
+   export SNS_TOPIC_ARN=your-topic-arn
+   export AWS_REGION=ap-northeast-1
+   export MAX_UPLOAD_MB=10
+   export ALLOWED_EXTENSIONS=.txt,.pdf,.png,.jpg,.jpeg,.gif,.csv,.json
+   export S3_MAKE_PUBLIC=false
+   ```
+4. **Configure AWS credentials** (via environment variables, AWS CLI, or `~/.aws/credentials`)
 5. **Run the app**:
    ```bash
-   uvicorn main:app --host 0.0.0.0 --port 8080 --reload
-   nohup uvicorn main:app --host 0.0.0.0 --port 8080 &
+   uvicorn main:app --host 0.0.0.0 --port 8080
    ```
-6. **Open your browser** at [http://127.0.0.1:8000](http://127.0.0.1:8000)
+6. **Health check**:
+   - `GET /health` should return `{"status":"ok"}`
+7. **Open your browser** at [http://127.0.0.1:8080](http://127.0.0.1:8080)
 
-## Notes
-- Make sure your AWS credentials have permission to upload to the S3 bucket and publish to the SNS topic.
-- The app is for demonstration and should not be used in production without proper security and validation.
+## Run Tests
+```bash
+pytest -q
+```
+
+## Production Notes
+- Bucket name and topic ARN are loaded from environment variables (no hardcoded secrets).
+- Upload file type and size are validated before upload.
+- Uploaded object names are randomized under the `uploads/` prefix.
+- Set `S3_MAKE_PUBLIC=true` only when public object access is intentionally required.
 # Pythons3snsec2-projec

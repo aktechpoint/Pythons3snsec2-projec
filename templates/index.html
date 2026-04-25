@@ -13,6 +13,9 @@
 
     {% if message %}
         <p style="color:green;">{{ message }}</p>
+        {% if original_name %}
+            <p>Uploaded: {{ original_name }}</p>
+        {% endif %}
         <a href="{{ file_url }}" target="_blank">View File</a>
     {% endif %}
 
