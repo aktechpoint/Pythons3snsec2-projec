@@ -31,13 +31,17 @@ ec2-s3-project/
 1. **Clone the repository**
 2. **Install dependencies**:
    ```bash
-   pip install fastapi uvicorn boto3
+    sudo apt update
+    sudo apt install python3-pip -y
+    pip3 install fastapi uvicorn boto3 python-multipart jinja2
+    pip install fastapi uvicorn boto3
    ```
 3. **Configure AWS credentials** (via environment variables, AWS CLI, or `~/.aws/credentials`)
 4. **Edit S3 bucket and SNS topic in `services/aws_service.py`** if needed.
 5. **Run the app**:
    ```bash
-   uvicorn main:app --reload
+   uvicorn main:app --host 0.0.0.0 --port 8080 --reload
+   nohup uvicorn main:app --host 0.0.0.0 --port 8080 &
    ```
 6. **Open your browser** at [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
