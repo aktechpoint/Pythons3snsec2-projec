@@ -1,7 +1,12 @@
 import os
 from dataclasses import dataclass
 
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+except ModuleNotFoundError:
+    # dotenv is optional; environment variables can still come from OS-level config.
+    def load_dotenv(*args, **kwargs):  # type: ignore[override]
+        return False
 
 
 load_dotenv()
