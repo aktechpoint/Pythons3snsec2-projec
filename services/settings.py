@@ -25,6 +25,8 @@ class Settings:
     bucket_name: str
     topic_arn: str
     max_upload_mb: int
+    object_prefix: str
+    download_expiry_seconds: int
     allowed_extensions: tuple[str, ...]
     make_public: bool
 
@@ -43,6 +45,8 @@ def get_settings() -> Settings:
         bucket_name=_read_env("S3_BUCKET_NAME"),
         topic_arn=_read_env("SNS_TOPIC_ARN"),
         max_upload_mb=int(os.getenv("MAX_UPLOAD_MB", "10")),
+        object_prefix=os.getenv("OBJECT_PREFIX", "uploads/"),
+        download_expiry_seconds=int(os.getenv("DOWNLOAD_EXPIRY_SECONDS", "300")),
         allowed_extensions=extensions,
         make_public=os.getenv("S3_MAKE_PUBLIC", "false").lower() == "true",
     )

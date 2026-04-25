@@ -22,5 +22,37 @@
     {% if error %}
         <p style="color:red;">{{ error }}</p>
     {% endif %}
+
+    <h3>Uploaded Objects</h3>
+    {% if objects %}
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>File Name</th>
+                    <th>Size (bytes)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for obj in objects %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ obj.name }}</td>
+                    <td>{{ obj.size }}</td>
+                    <td>
+                        <a href="/download/{{ obj.key }}">Download</a>
+                        <form method="POST" action="/delete" style="display:inline;">
+                            <input type="hidden" name="object_key" value="{{ obj.key }}">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No objects found.</p>
+    {% endif %}
 </body>
 </html>

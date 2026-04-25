@@ -48,3 +48,61 @@ def send_sns_notification(filename: str, file_url: str) -> None:
         )
     except (ClientError, BotoCoreError) as exc:
         raise RuntimeError("Failed to publish SNS notification") from exc
+
+
+def list_objects() -> list[dict[str, str]]:
+    import boto3
+    from botocore.exceptions import BotoCoreError, ClientError
+
+    settings = get_settings()
+    s3 = boto3.client("s3", region_name=settings.aws_region)
+    prefix = settings.object_prefix
+
+    try:
+        response = s3.list_objects_v2(Bucket=settings.bucket_name, Prefix=prefix)
+    except (ClientError, BotoCoreError) as exc:
+        raise RuntimeError("Failed to list S3 objects") from exc
+
+    items: list[dict[str, str]] = []
+    for obj in response.get("Contents", []):
+        key = obj.get("Key")
+        if not key or key.endswith("/"):
+            continue
+        items.append(
+            {
+                "key": key,
+                "name": key.split("/")[-1],
+                "size": str(obj.get("Size", 0)),
+            }
+        )
+    return items
+
+
+def generate_download_url(object_key: str) -> str:
+    import boto3
+    from botocore.exceptions import BotoCoreError, ClientError
+
+    settings = get_settings()
+    s3 = boto3.client("s3", region_name=settings.aws_region)
+
+    try:
+        return s3.generate_presigned_url(
+            "get_object",
+            Params={"Bucket": settings.bucket_name, "Key": object_key},
+            ExpiresIn=settings.download_expiry_seconds,
+        )
+    except (ClientError, BotoCoreError) as exc:
+        raise RuntimeError("Failed to generate download URL") from exc
+
+
+def delete_object(object_key: str) -> None:
+    import boto3
+    from botocore.exceptions import BotoCoreError, ClientError
+
+    settings = get_settings()
+    s3 = boto3.client("s3", region_name=settings.aws_region)
+
+    try:
+        s3.delete_object(Bucket=settings.bucket_name, Key=object_key)
+    except (ClientError, BotoCoreError) as exc:
+        raise RuntimeError("Failed to delete S3 object") from exc

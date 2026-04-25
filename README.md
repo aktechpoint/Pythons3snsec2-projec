@@ -57,5 +57,7 @@ pytest -q
 - Bucket name and topic ARN are loaded from environment variables (no hardcoded secrets).
 - Upload file type and size are validated before upload.
 - Uploaded object names are randomized under the `uploads/` prefix.
+- Uploaded objects are listed on the home page with download and delete actions.
+- Downloads use a pre-signed URL controlled by `DOWNLOAD_EXPIRY_SECONDS`.
 - Set `S3_MAKE_PUBLIC=true` only when public object access is intentionally required.
 # Pythons3snsec2-projec
